@@ -20,13 +20,13 @@ export default function header() {
     <Flex align="center">
       <Img
         w="auto"
-        h="54px"
+        h={["38px", "44px","54px"]} 
         objectFit="cover"
         src="https://www.gstatic.com/images/branding/product/2x/keep_2020q4_48dp.png"
         alt="logo"
       />
 
-      <Text color="#5f6368" fontSize="2xl" fontWeight="600">
+      <Text color="#5f6368" fontSize={["lg", "xl", "2xl"]} fontWeight="600">
         Keep
       </Text>
 </Flex>
@@ -45,7 +45,7 @@ export default function header() {
         
       </InputGroup>
       <Box>
-      <Link color='#523bd1' fontWeight="bold" p="28px" href='#'>
+      <Link color='#523bd1' fontWeight="bold" p={["10px" , "16px", "28px"]} href='#'>
         Sign In
           </Link>
           </Box>

@@ -111,18 +111,18 @@ export default function Home(props: any) {
         transition="opacity 0.218s ease-in,transform 0.218s ease-in"
       >
         <Box
-          p="10px 10px 10px 60px"
+          p={["4px 4px 4px 16px" ,"10px 10px 10px 60px"]}
           fontSize="18px"
           display="flex"
           alignItems="center"
         >
-          <CloseIcon onClick={() => {
+          <CloseIcon width={["0.8em", "1em", "1em"]} height={["0.8em", "1em", "1em"]} onClick={() => {
             setSelectBar(false)
           }}/>
-          <Text pl="24px">Selected</Text>
+          <Text pl="24px"> 0 Selected</Text>
         </Box>
-        <Box p="22px">
-          <SpinnerIcon  cursor="pointer" />
+        <Box p={["16px","18px","22px"]}>
+       
           <DeleteIcon ml="28px"  cursor="pointer"/>
         </Box>
       </Box>}
@@ -150,7 +150,7 @@ export default function Home(props: any) {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent width="unset" mt={36}>
+        <ModalContent width="100%" mt={36}>
           <ModalBody p={0} max-width="800px" top="20%" left="24%">
             <CreateNote
               titleValueEdit={titleValueEdit}
