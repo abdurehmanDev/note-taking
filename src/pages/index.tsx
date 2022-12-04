@@ -16,40 +16,71 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import {
-  DeleteIcon,
-  SpinnerIcon,
-  SettingsIcon,
-  CheckIcon,
-  CloseIcon,
-} from "@chakra-ui/icons";
+import { DeleteIcon, CloseIcon } from "@chakra-ui/icons";
 
 export default function Home(props: any) {
   const [notes, setNotes] = useState<any[]>([]);
-
   const [titleValue, setTitleValue] = useState<any>("");
   const [containValue, setContainValue] = useState<any>("");
   const [titleValueEdit, setTitleValueEdit] = useState<any>("");
   const [containValueEdit, setContainValueEdit] = useState<any>("");
-
   const [editStyle, setEditStyle] = useState(false);
   const [editIndex, setEditIndex] = useState(Number);
   const [tempArray, setTempArray] = useState<any[]>([]);
   const [selectBar, setSelectBar] = useState(false);
+  const [temp] = useState<any[]>([]);
 
-  const selectEnable = (index : number) => {
-    selectBar ?  setSelectBar(false) :  setSelectBar(true);
-   tempArray.push(index)
+  const selectEnable = (index: number) => {
+    if (notes[index].select) {
+      setSelectBar(true);
+      // const insert = () => {
+      //   tempArray.push(index);
+      //   return tempArray;
+      // }
+      temp.push(index);
+      console.log(temp);
+      
+      setTempArray(temp);
+
+      notes[index].select = false;
+      console.log("true");
+    } 
     
-  }
+    else {
+      console.log("false");
+      tempArray.length = 0;
+      setSelectBar(false);
+      notes.map((item) => (item.select = true));
+    }
+  };
 
+  console.log(notes, tempArray);
 
+  // working on issue
+  const deleteSelected = () => {
+    for (let i = 0; i < tempArray.length; i++) {
+      if (!notes[tempArray[i]].select) {
+        const remainElement = notes.filter(
+          (item) => item.title !== notes[tempArray[i]].title
+        );
 
+        //  if(notes[tempArray[i]].title) {
+        //   const DeleteElement = notes.splice(tempArray[i], 1)
+        setNotes(remainElement);
+        console.log("original", notes);
+        console.log("remain", remainElement);
+      }
+    }
 
-
+    tempArray.length = 0;
+  };
 
   const submitButton = (event: any) => {
-    const containObj = { title: titleValue, content: containValue };
+    const containObj = {
+      title: titleValue,
+      content: containValue,
+      select: true,
+    };
     notes.push(containObj);
     setContainValue("");
     setTitleValue("");
@@ -73,8 +104,10 @@ export default function Home(props: any) {
   };
 
   const deleteNote = (index: number) => {
-    notes.splice(index, 1);
-    setNotes(notes);
+    const updateArray = notes.filter(
+      (item) => item.title !== notes[index].title
+    );
+    setNotes(updateArray);
   };
 
   const handleEdit = (index: number) => {
@@ -90,42 +123,50 @@ export default function Home(props: any) {
     onClose();
     setEditStyle(false);
   };
-  console.log(editStyle);
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  console.log(notes);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-    {selectBar && <Box
-        display="flex"
-        flexDirection="row"
-        alignContent="center"
-        justifyContent="space-between"
-        alignItems="center"
-        zIndex="1000"
-        backgroundColor="#fff"
-        pos="absolute"
-        w="100%"
-        transform="translateY(0px)"
-        transition="opacity 0.218s ease-in,transform 0.218s ease-in"
-      >
+      {selectBar && (
         <Box
-          p={["4px 4px 4px 16px" ,"10px 10px 10px 60px"]}
-          fontSize="18px"
           display="flex"
+          flexDirection="row"
+          alignContent="center"
+          justifyContent="space-between"
           alignItems="center"
+          zIndex="1000"
+          backgroundColor="#fff"
+          pos="absolute"
+          w="100%"
+          transform="translateY(0px)"
+          transition="opacity 0.218s ease-in,transform 0.218s ease-in"
         >
-          <CloseIcon width={["0.8em", "1em", "1em"]} height={["0.8em", "1em", "1em"]} onClick={() => {
-            setSelectBar(false)
-          }}/>
-          <Text pl="24px"> 0 Selected</Text>
+          <Box
+            p={["4px 4px 4px 16px", "10px 10px 10px 60px"]}
+            fontSize="18px"
+            display="flex"
+            alignItems="center"
+          >
+            <CloseIcon
+              width={["0.8em", "1em", "1em"]}
+              height={["0.8em", "1em", "1em"]}
+              cursor="pointer"
+              onClick={() => {
+                setSelectBar(false);
+              }}
+            />
+            <Text pl="24px"> {tempArray.length} Selected</Text>
+          </Box>
+          <Box p={["16px", "18px", "22px"]}>
+            <DeleteIcon
+              ml="28px"
+              cursor="pointer"
+              onClick={() => deleteSelected()}
+            />
+          </Box>
         </Box>
-        <Box p={["16px","18px","22px"]}>
-       
-          <DeleteIcon ml="28px"  cursor="pointer"/>
-        </Box>
-      </Box>}
+      )}
       <Header />
       <CreateNote
         titleValue={titleValue}
